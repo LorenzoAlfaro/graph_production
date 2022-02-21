@@ -26,11 +26,36 @@ def worker_counter(replay, sec, player_id):
     
     return len(workers)
 
+def worker_counter2(events, sec, player_id):
+    frame = sec * 22.404
+
+    unit_born_events = events["UnitBornEvent"]
+    unit_died_events = events["UnitDiedEvent"]
+
+    workers = []
+
+    for e in unit_born_events:
+
+        if e.control_pid == player_id and e.unit.is_worker and e.frame < frame:
+            workers.append(e.unit)
+            
+    for e in unit_died_events:
+
+        if e.unit in workers and e.frame < frame:
+            workers.remove(e.unit)
+    return len(workers)
+
 def getMyTeamnumber(replay, name):        
     for key in replay.player:
         
         if replay.player[key].name == name:
             return replay.player[key].pid
+
+def getKey(replay, name):
+    for key in replay.player:
+        
+        if replay.player[key].name == name:
+            return key
             
 def printName(replay):
 
@@ -53,21 +78,28 @@ def avgWorkerAtSec(file, sec):
         try:
             replay = sc2reader.load_replay(path + f, load_map=False)
 
+
             if replay.is_ladder and replay.type == '1v1' and replay.frames > (sec * 22.404):                                        
+                # create dictionary of events and their types
+                event_names = set([event.name for event in replay.events])
+                events_of_type = {name: [] for name in event_names}
+                for event in replay.events:
+                    events_of_type[event.name].append(event)
+
                 pid = getMyTeamnumber(replay,'VanKiwi')
                 if pid ==1:
                     pid2 = 2
                 else:
                     pid2 = 1
 
-                print(formatReplay(replay))
-                wc = worker_counter(replay, 360, pid)
+                # print(formatReplay(replay))
+                wc = worker_counter2(events_of_type, 360, pid)
                 avg.append(wc)
-                wc2 = worker_counter(replay, 360, pid2)
+                wc2 = worker_counter2(events_of_type, 360, pid2)
                 avg2.append(wc2)
 
-                print("player 1:",wc)
-                print("player 2:",wc2)
+                logWorker(file, replay.filename, wc,wc2, replay.player[pid].name, replay.player[pid2].name, replay.player[pid].result)
+               
         except Exception as e:
             print(e)
 
@@ -76,17 +108,14 @@ def avgWorkerAtSec(file, sec):
     print( average(avg2))
 
 
-def logWorker(replay, file, sec):    
-    length_of_game = replay.frames // 22.404
-
+def logWorker(file, fileName, wc,wc2, p1, p2, result):    
     
-
-    # 22.404 frames per second
-    file.write(formatReplay(replay))
-    file.write("player 1: " + str(worker_counter(replay, sec, 1)) + '\n')
-    file.write("player 2: " + str(worker_counter(replay, sec, 2)) + '\n')
-    file.write(str(length_of_game/60) + '\n')
-    file.write(str(replay.frames) + '\n')
+        
+    file.write(result + '\t' + str(wc) + '\t' + str(wc2) + '\t' + p1 + '\t' + p2 + '\t' + fileName + '\t' + '\n')
+    # file.write("player 1: " + str(worker_counter(replay, sec, 1)) + '\n')
+    # file.write("player 2: " + str(worker_counter(replay, sec, 2)) + '\n')
+    # file.write(str(length_of_game/60) + '\n')
+    # file.write(str(replay.frames) + '\n')
 
 def graphWorker(replay):
     length_of_game = replay.frames // 22.404
@@ -130,9 +159,6 @@ def graphWorker(replay):
 #                                                             udiede.killing_unit,
 #                                                             udiede.x,
 #                                                             udiede.y))
-
-
-
 
 # python .\prettyPrinter.py "C:\Users\loren\Documents\StarCraft II\Accounts\66185323\1-S2-2-818362\Replays\Multiplayer\Blackburn LE (47).SC2Replay"
 # https://www.miguelgondu.com/blogposts/2018-09-03/a-tutorial-on-sc2reader-events-and-units/

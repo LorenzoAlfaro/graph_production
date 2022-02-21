@@ -8,7 +8,6 @@ path = 'C:/Users/loren/Documents/StarCraft II/Accounts/66185323/1-S2-2-818362/Re
 file = 'Pride of Altaris LE (6).SC2Replay'
 
 f = open("workerslost.txt", "a")
-f.write("Now the file has more content!")
 replay = sc2reader.load_replay(path + file, load_map=False)
 
 avgWorkerAtSec(f,360)
