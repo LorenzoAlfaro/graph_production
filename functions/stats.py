@@ -81,6 +81,8 @@ def avgWorkerAtSec(file, sec):
 
             if replay.is_ladder and replay.type == '1v1' and replay.frames > (sec * 22.404):                                        
                 # create dictionary of events and their types
+                length_of_game = replay.frames // 22.404
+
                 event_names = set([event.name for event in replay.events])
                 events_of_type = {name: [] for name in event_names}
                 for event in replay.events:
@@ -98,7 +100,7 @@ def avgWorkerAtSec(file, sec):
                 wc2 = worker_counter2(events_of_type, 360, pid2)
                 avg2.append(wc2)
 
-                logWorker(file, replay.filename, wc,wc2, replay.player[pid].name, replay.player[pid2].name, replay.player[pid].result)
+                logWorker(file, replay.filename, wc,wc2, replay.player, pid, pid2, length_of_game, replay.start_time)
                
         except Exception as e:
             print(e)
@@ -108,10 +110,17 @@ def avgWorkerAtSec(file, sec):
     print( average(avg2))
 
 
-def logWorker(file, fileName, wc,wc2, p1, p2, result):    
+def logWorker(file, fileName, wc,wc2, playerDict, pid, pid2, length, date):    
     
+    result = playerDict[pid].result
+    p1 = playerDict[pid].name
+    p2 = playerDict[pid2].name
+    r1 = playerDict[pid].pick_race
+    r2 = playerDict[pid2].pick_race
+
         
-    file.write(result + '\t' + str(wc) + '\t' + str(wc2) + '\t' + p1 + '\t' + p2 + '\t' + fileName + '\t' + '\n')
+    file.write(result + '\t' + str(wc) + '\t' + str(wc2) + '\t' + p1 + '\t' + p2 + '\t' +
+        r1 + '\t' + r2 + '\t' + str(length) + '\t' + str(date) + '\t' +  fileName + '\t' + '\n')
     # file.write("player 1: " + str(worker_counter(replay, sec, 1)) + '\n')
     # file.write("player 2: " + str(worker_counter(replay, sec, 2)) + '\n')
     # file.write(str(length_of_game/60) + '\n')
@@ -119,8 +128,12 @@ def logWorker(file, fileName, wc,wc2, p1, p2, result):
 
 def graphWorker(replay):
     length_of_game = replay.frames // 22.404
-    workers_1 = [worker_counter(replay, k, 1) for k in range(int(length_of_game)+1)]
-    workers_2 = [worker_counter(replay, k, 2) for k in range(int(length_of_game)+1)]
+    event_names = set([event.name for event in replay.events])
+    events_of_type = {name: [] for name in event_names}
+    for event in replay.events:
+        events_of_type[event.name].append(event)
+    workers_1 = [worker_counter2(events_of_type, k, 1) for k in range(int(length_of_game)+1)]
+    workers_2 = [worker_counter2(events_of_type, k, 2) for k in range(int(length_of_game)+1)]
 
     plt.figure()
     plt.plot(workers_1, label=replay.players[0])
