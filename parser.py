@@ -53,10 +53,10 @@ f.close()
 
 # TODO 6 minutes metrics
 # how many workers did I loose on the first 6 minutes
-# how long does it take to the get 3thre base saturation?
+# how long does it take to the get 3 base saturation?
 # how long to max out? 8:00 max roach metric
 # what types of units kill my drones? adepts? reaper? liberator? hellions?
-# worker graphs
+
 # creep tumor count
 # overlord spread
 # overseer changeling
@@ -76,3 +76,4 @@ f.close()
 # save data in a database
 # sort my replays and rename them 
 # https://github.com/ZephyrBlu other libraries
+# https://stackoverflow.com/questions/58372068/keep-watch-on-a-folder-for-recently-added-file-and-display-the-data-inside-that
