@@ -4,6 +4,8 @@ import time
 from watchdog.observers import Observer
 from ImagesEventHandler import ImagesEventHandler
 
+#https://blog.magrathealabs.com/filesystem-events-monitoring-with-python-9f5329b651c3
+
 class ImagesWatcher:
     def __init__(self, src_path):
         self.__src_path = src_path

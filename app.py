@@ -20,12 +20,8 @@ class MainWindow(qtw.QMainWindow):
 
         # keep track of the most recent file
 
-
-
     def findNewFile(self):
-
         print("Created: %s" % time.ctime(os.path.getctime("C:\\Users\\e420882\\Desktop\\TEST\\A.txt")))
-        pass
 
 if __name__ == "__main__":
     app = qtw.QApplication(sys.argv)
