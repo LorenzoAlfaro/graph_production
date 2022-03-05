@@ -12,12 +12,9 @@ class MainWindow(qtw.QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.fileWatcher.addPath("C:\\Users\\e420882\\Desktop\\TEST")
-
-        self.fileWatcher.directoryChanged.connect(lambda p:print('file has changed'+p) )
-
-        self.findNewFile()
-
+        # self.fileWatcher.addPath("C:\\Users\\e420882\\Desktop\\TEST")
+        # self.fileWatcher.directoryChanged.connect(lambda p:print('file has changed'+p) )
+        # self.findNewFile()
         # keep track of the most recent file
 
     def findNewFile(self):
