@@ -1,7 +1,7 @@
 import sys
 import time
 from watchdog.observers import Observer
-from scripts.replay_parser.ImagesEventHandler import ImagesEventHandler
+from functions.ImagesEventHandler import ImagesEventHandler
 
 # https://blog.magrathealabs.com/filesystem-events-monitoring-with-python-9f5329b651c3
 
