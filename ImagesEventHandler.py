@@ -4,7 +4,7 @@ from PIL import Image
 from PIL.ImageOps import grayscale
 from watchdog.events import RegexMatchingEventHandler
 from functions.stats import avgWorkerAtSec, getMyTeamnumber, worker_counter, graphWorker, logWorker, worker_counter2
-import sc2reader
+import sc2reader as sc2
 import time
 
 class ImagesEventHandler(RegexMatchingEventHandler):
@@ -38,7 +38,22 @@ class ImagesEventHandler(RegexMatchingEventHandler):
             "print not replay"
             return
         
-        replay = sc2reader.load_replay(fileName, load_map=False)
+        replay = sc2.load_replay(fileName, load_map=False)
+        # print(dir(replay.players[0]))
+        print(replay.players[0].url)
+        print("uid",replay.players[0].uid)
+        # print("team_id",replay.players[0].teamd_id)
+        print(replay.players[0].team)
+        print("subregion", replay.players[0].subregion)
+        print("sid",replay.players[0].sid)
+        print("region",replay.players[0].region)
+        print("recorder", replay.players[0].recorder)
+        print("pid",replay.players[0].pid)
+        print("name",replay.players[0].name)
+        print("messages",replay.players[0].messages)
+        print("highest league", replay.players[0].highest_league)
+        print("detail",replay.players[0].detail_data)
+        print("clan tag",replay.players[0].clan_tag)        
         
         # graphWorker(replay)
 
@@ -66,11 +81,7 @@ class ImagesEventHandler(RegexMatchingEventHandler):
         self.printWorkerCount(360,events_of_type,pid,pid2)
         self.printWorkerCount(420,events_of_type,pid,pid2)            
                 # logWorker(file, replay.filename, wc,wc2, replay.player, pid, pid2, length_of_game, replay.start_time)
-        try:
-            print('hel;')
                
-        except Exception as e:
-            print(e)
 
 
     def printWorkerCount(self,sec,events_of_type, pid, pid2):
