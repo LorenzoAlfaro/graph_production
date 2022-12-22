@@ -1,10 +1,9 @@
 import sys
 import time
-
 from watchdog.observers import Observer
-from ImagesEventHandler import ImagesEventHandler
+from functions.ImagesEventHandler import ImagesEventHandler
 
-#https://blog.magrathealabs.com/filesystem-events-monitoring-with-python-9f5329b651c3
+# https://blog.magrathealabs.com/filesystem-events-monitoring-with-python-9f5329b651c3
 
 class ImagesWatcher:
     def __init__(self, src_path):

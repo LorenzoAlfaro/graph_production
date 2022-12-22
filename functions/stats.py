@@ -2,9 +2,7 @@ import os
 from numpy import average
 import sc2reader
 import matplotlib.pyplot as plt
-
-from prettyPrinter import formatReplay
-
+from functions.prettyPrinter import formatReplay
 
 path = 'C:/Users/loren/Documents/StarCraft II/Accounts/66185323/1-S2-2-818362/Replays/Multiplayer/'
 
@@ -66,8 +64,6 @@ def printName(replay):
         print(replay.player[1].pid)
         print(replay.player[1].result)
     
-
-
 def avgWorkerAtSec(file, sec):
     path = 'C:/Users/loren/Documents/StarCraft II/Accounts/66185323/1-S2-2-818362/Replays/Multiplayer/'
     files = os.listdir(path)
@@ -108,7 +104,6 @@ def avgWorkerAtSec(file, sec):
     print('promedio')
     print( average(avg))
     print( average(avg2))
-
 
 def logWorker(file, fileName, wc,wc2, playerDict, pid, pid2, length, date):    
     
@@ -175,29 +170,5 @@ def graphWorker(replay):
 
 # python .\prettyPrinter.py "C:\Users\loren\Documents\StarCraft II\Accounts\66185323\1-S2-2-818362\Replays\Multiplayer\Blackburn LE (47).SC2Replay"
 # https://www.miguelgondu.com/blogposts/2018-09-03/a-tutorial-on-sc2reader-events-and-units/
-
-# TODO 6 minutes metrics
-# how many workers did I loose on the first 6 minutes
-# how long does it take to the get 3thre base saturation?
-# how long to max out? 8:00 max roach metric
-# what types of units kill my drones? adepts? reaper? liberator? hellions?
-# worker graphs
-# creep tumor count
-# overlord spread
-# overseer changeling
-
-# basic build opener of my oponent
-
-# analize builds I loose to the most
-# analize map records
-
-# control group management - hard to analize
-# analize my scouts - hard
-# check location of enemy tech on the position of my units and vision? hard
-# camera movements? how long does it take to respond to an attack or harrasment
-# detect misclicks? hard
-
-# make it run in the background
-# save data in a database
-# sort my replays and rename them 
-
+# https://github.com/ZephyrBlu other libraries
+# https://stackoverflow.com/questions/58372068/keep-watch-on-a-folder-for-recently-added-file-and-display-the-data-inside-that

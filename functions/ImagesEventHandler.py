@@ -31,11 +31,10 @@ class ImagesEventHandler(RegexMatchingEventHandler):
         image.thumbnail(self.THUMBNAIL_SIZE)
         image.save(filename)
 
-
     def newReplay(self, fileName):
 
         if ".writeCacheBackup" in fileName:
-            "print not replay"
+            print("not a replay file")
             return
         
         replay = sc2.load_replay(fileName, load_map=False)
@@ -56,7 +55,6 @@ class ImagesEventHandler(RegexMatchingEventHandler):
         print("clan tag",replay.players[0].clan_tag)        
         
         # graphWorker(replay)
-
 
         # if replay.is_ladder and replay.type == '1v1' and replay.frames > (sec * 22.404):                                        
         # create dictionary of events and their types
@@ -80,10 +78,8 @@ class ImagesEventHandler(RegexMatchingEventHandler):
         self.printWorkerCount(300,events_of_type,pid,pid2)
         self.printWorkerCount(360,events_of_type,pid,pid2)
         self.printWorkerCount(420,events_of_type,pid,pid2)            
-                # logWorker(file, replay.filename, wc,wc2, replay.player, pid, pid2, length_of_game, replay.start_time)
+        # logWorker(file, replay.filename, wc,wc2, replay.player, pid, pid2, length_of_game, replay.start_time)
                
-
-
     def printWorkerCount(self,sec,events_of_type, pid, pid2):
         wc = worker_counter2(events_of_type, sec, pid)
         wc2 = worker_counter2(events_of_type, sec, pid2)

@@ -4,7 +4,6 @@ from PyQt5 import QtCore as qtc
 from PyQt5 import QtGui as qtg
 import os.path, time
 
-
 class MainWindow(qtw.QMainWindow):
 
     fileWatcher = qtc.QFileSystemWatcher()
