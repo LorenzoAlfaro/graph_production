@@ -1,5 +1,5 @@
 from functions.stats import avgWorkerAtSec, worker_counter, graphWorker, logWorker
-from prettyPrinter import formatReplay
+from functions.prettyPrinter import formatReplay
 import sc2reader
 import matplotlib.pyplot as plt
 import os

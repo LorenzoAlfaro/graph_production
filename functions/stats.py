@@ -3,7 +3,7 @@ from numpy import average
 import sc2reader
 import matplotlib.pyplot as plt
 
-from prettyPrinter import formatReplay
+from functions.prettyPrinter import formatReplay
 
 
 path = 'C:/Users/loren/Documents/StarCraft II/Accounts/66185323/1-S2-2-818362/Replays/Multiplayer/'
