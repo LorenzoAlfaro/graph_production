@@ -80,6 +80,10 @@ sec = 1 # second you are interesed at
 
 for f in files:
     try:
+        if ".writeCacheBackup" in f:
+            print("not a replay file")
+            continue
+
         replay = sc2.load_replay(path + f, load_map = False)
         # print(f)
         if replay.type == '1v1' and replay.frames > (sec * 22.404):
