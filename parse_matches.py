@@ -1,13 +1,11 @@
 import mysql.connector
-from decouple import config
 import os
 import sc2reader as sc2
-from sc2reader.objects import Player
-from functions.stats import getMyTeamnumber, worker_counter2, logWorker
 import traceback
+from decouple import config
+from sc2reader.objects import Player
 
 def match_result(player, opponent)->str:
-
     race_1 = player.play_race
     race_2 = opponent.play_race
     result = player.result
@@ -60,11 +58,28 @@ def match_result(player, opponent)->str:
             elif result == 'Loss':
                 return 'p_p_lose'
 
+def update_match_record(db_connection, db_cursor, player, opponent):
+    print(player.name,player.play_race, opponent.name,opponent.play_race, player.result)
+    sql = f"SELECT * FROM match_results WHERE player_1 = {player_uid} AND player_2 = {opponent_uid}"
+    db_cursor.execute(sql)
+    myresult = db_cursor.fetchall()
+
+    if len(myresult) == 0:
+        column = (match_result(player, opponent))
+        sql_insert = f"INSERT INTO match_results (player_1, player_2, {column}) VALUES ({player_uid},{opponent_uid}, 1)"
+        db_cursor.execute(sql_insert)
+        db_connection.commit()
+    else:
+        id = myresult[0][0]
+        column = match_result(player, opponent)
+        sql_update = f"UPDATE match_results set {column} = {column} + 1 WHERE id = {id}"
+        db_cursor.execute(sql_update)
+        db_connection.commit()
+
 password = config('MYSQL_PASSWORD')
 user = config('USER_NAME')
 path = 'C:/Users/loren/Documents/StarCraft II/Accounts/66185323/1-S2-2-818362/Replays/Multiplayer/'
 # path = 'C:/Users/loren/Documents/StarCraft II/Accounts/66185323/1-S2-1-1931022/Replays/Multiplayer/'
-
 
 mydb = mysql.connector.connect(
     host="localhost",
@@ -105,22 +120,7 @@ for f in files:
         if not opponent.is_human :
             continue
 
-        print(player.name,player.play_race, opponent.name,opponent.play_race, player.result)
-        sql = f"SELECT * FROM match_results WHERE player_1 = {player_uid} AND player_2 = {opponent_uid}"
-        mycursor.execute(sql)
-        myresult = mycursor.fetchall()
-
-        if len(myresult) == 0:
-            column = (match_result(player, opponent))
-            sql_insert = f"INSERT INTO match_results (player_1, player_2, {column}) VALUES ({player_uid},{opponent_uid}, 1)"
-            mycursor.execute(sql_insert)
-            mydb.commit()
-        else:
-            id = myresult[0][0]
-            column = match_result(player, opponent)
-            sql_update = f"UPDATE match_results set {column} = {column} + 1 WHERE id = {id}"
-            mycursor.execute(sql_update)
-            mydb.commit()
+        update_match_record(mydb, mycursor, player, opponent)
 
     except Exception as e:
         # raise e
