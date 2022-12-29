@@ -6,15 +6,59 @@ from sc2reader.objects import Player
 from functions.stats import getMyTeamnumber, worker_counter2, logWorker
 import traceback
 
-def match_result(player_1, player_2):
+def match_result(player, opponent)->str:
 
-    race_1 = player_1.play_race
-    race_2 = player_2.play_race
-    result = player_1.result
-
-    print(race_1,race_2,result)
-
-    ...
+    race_1 = player.play_race
+    race_2 = opponent.play_race
+    result = player.result
+    if race_1 == 'Zerg':
+        if race_2 == 'Zerg':
+            if result == 'Win':
+                return 'z_z_win'
+            elif result == 'Loss':
+                return 'z_z_lose'
+        elif race_2 == 'Terran':
+            if result == 'Win':
+                return 'z_t_win'
+            elif result == 'Loss':
+                return 'z_t_lose'
+        elif race_2 == 'Protoss':
+            if result == 'Win':
+                return 'z_p_win'
+            elif result == 'Loss':
+                return 'z_p_lose'
+    elif race_1 == 'Terran':
+        if race_2 == 'Zerg':
+            if result == 'Win':
+                return 't_z_win'
+            elif result == 'Loss':
+                return 't_z_lose'
+        elif race_2 == 'Terran':
+            if result == 'Win':
+                return 't_t_win'
+            elif result == 'Loss':
+                return 't_t_lose'
+        elif race_2 == 'Protoss':
+            if result == 'Win':
+                return 't_p_win'
+            elif result == 'Loss':
+                return 't_p_lose'
+    elif race_1 == 'Protoss':
+        if race_2 == 'Zerg':
+            if result == 'Win':
+                return 'p_z_win'
+            elif result == 'Loss':
+                return 'p_z_lose'
+        elif race_2 == 'Terran':
+            if result == 'Win':
+                return 'p_t_win'
+            elif result == 'Loss':
+                return 'p_t_lose'
+        elif race_2 == 'Protoss':
+            if result == 'Win':
+                return 'p_p_win'
+            elif result == 'Loss':
+                return 'p_p_lose'
 
 password = config('MYSQL_PASSWORD')
 user = config('USER_NAME')
