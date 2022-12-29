@@ -105,20 +105,26 @@ for f in files:
             if not opponent.is_human :
                 continue
 
-            match_result(player, opponent)
-            sql = "SELECT * FROM match_results WHERE player_2 = %s"
-            id = (opponent_uid,)
+            sql = f"SELECT * FROM match_results WHERE player_1 = {player_uid} AND player_2 = {opponent_uid}"
             mycursor.execute(sql, id)
-            print(opponent_uid)
 
             myresult = mycursor.fetchall()
             print(len(myresult))
 
-            # if len(myresult==0):
-            #     sql_insert = "INSERT INTO match_results (player_1, player_2, clan_tag, region, subregion, player_url) VALUES (%s, %s, %s, %s, %s, %s)"
+            if len(myresult) == 0:
+                column = (match_result(player, opponent))
+                sql_insert = f"INSERT INTO match_results (player_1, player_2, {column}) VALUES ({player_uid},{opponent_uid}, 1)"
+                mycursor.execute(sql_insert)
+                mydb.commit()
+                print("insert")
+            else:
+                column = match_result(player, opponent)
+                sql_update = f"UPDATE match_results set {column} = {column} + 1 WHERE player_1 = {player_uid} AND player_2 = {opponent_uid}"
+                mycursor.execute(sql_update)
+                mydb.commit()
+                print("update")
 
 
-            # print(p.name, p.result)
     except Exception as e:
         # raise e
         print("-------------------------------")
