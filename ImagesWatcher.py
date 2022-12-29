@@ -36,5 +36,5 @@ class ImagesWatcher:
         )
 
 if __name__ == "__main__":
-    src_path = sys.argv[1] if len(sys.argv) > 1 else '.'
+    src_path = sys.argv[1] if len(sys.argv) > 1 else 'C:/Users/loren/Documents/StarCraft II/Accounts/66185323/1-S2-1-1931022/Replays/Multiplayer/'
     ImagesWatcher(src_path).run()

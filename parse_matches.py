@@ -5,6 +5,18 @@ import traceback
 from decouple import config
 from sc2reader.objects import Player
 
+
+def insert_player(db_connection, db_cursor, player):
+    uid = player.detail_data['bnet']['uid']
+    tag2 = "-"
+    if player.clan_tag != "":
+        tag = bytes(player.clan_tag, 'utf-8')
+        tag2 = bytes.decode(tag,'utf-8')
+
+    sql = f"INSERT INTO player_table (uid, player_name, clan_tag, region, subregion, player_url) VALUES ({uid}, '{player.name}', '{tag2}', '{player.region}', {player.subregion}, '{player.url}')"
+    db_cursor.execute(sql)
+    db_connection.commit()
+
 def match_result(player, opponent)->str:
     race_1 = player.play_race
     race_2 = opponent.play_race
@@ -60,12 +72,14 @@ def match_result(player, opponent)->str:
 
 def update_match_record(db_connection, db_cursor, player, opponent):
     print(player.name,player.play_race, opponent.name,opponent.play_race, player.result)
+    opponent_uid = opponent.detail_data['bnet']['uid']
+    player_uid = player.detail_data['bnet']['uid']
     sql = f"SELECT * FROM match_results WHERE player_1 = {player_uid} AND player_2 = {opponent_uid}"
     db_cursor.execute(sql)
     myresult = db_cursor.fetchall()
 
     if len(myresult) == 0:
-        column = (match_result(player, opponent))
+        column = match_result(player, opponent)
         sql_insert = f"INSERT INTO match_results (player_1, player_2, {column}) VALUES ({player_uid},{opponent_uid}, 1)"
         db_cursor.execute(sql_insert)
         db_connection.commit()
@@ -76,56 +90,42 @@ def update_match_record(db_connection, db_cursor, player, opponent):
         db_cursor.execute(sql_update)
         db_connection.commit()
 
-password = config('MYSQL_PASSWORD')
-user = config('USER_NAME')
-path = 'C:/Users/loren/Documents/StarCraft II/Accounts/66185323/1-S2-2-818362/Replays/Multiplayer/'
-# path = 'C:/Users/loren/Documents/StarCraft II/Accounts/66185323/1-S2-1-1931022/Replays/Multiplayer/'
 
-mydb = mysql.connector.connect(
-    host="localhost",
-    user=user,
-    password=password,
-    database="trainer",
-    ssl_disabled=True
-    )
-mycursor = mydb.cursor()
-# open folder of replays
-files = os.listdir(path)
-sec = 1 # second you are interesed at
-
-for f in files:
+def update_db(mydb, mycursor, file_path):
     try:
-        if ".writeCacheBackup" in f:
+        sec = 1
+        if ".writeCacheBackup" in file_path:
             print("not a replay file")
-            continue
-
-        replay = sc2.load_replay(path + f, load_map = False)
+            return
+        replay = sc2.load_replay(file_path, load_map = False)
         # print(f)
         if replay.type != '1v1' or replay.frames < (sec * 22.404):
-            continue
+            return
 
         opponent = replay.players[0]
-        opponent_uid = opponent.detail_data['bnet']['uid']
-
         player = replay.players[1]
-        player_uid = player.detail_data['bnet']['uid']
+        opp_uid = opponent.detail_data['bnet']['uid']
 
-        if opponent_uid == 818362 or opponent_uid == 1931022:
+        if opp_uid == 818362 or opp_uid == 1931022:
             opponent = replay.players[1]
-            opponent_uid = opponent.detail_data['bnet']['uid']
-
             player = replay.players[0]
-            player_uid = player.detail_data['bnet']['uid']
 
         if not opponent.is_human :
-            continue
+            return
 
-        update_match_record(mydb, mycursor, player, opponent)
-
+        insert_player(mydb, mycursor, opponent)
     except Exception as e:
         # raise e
         print("-------------------------------")
-        print(traceback.format_exc())
+        # print(traceback.format_exc())
+        print(e, file_path)
         print("-------------------------------")
 
-
+    try:
+        update_match_record(mydb, mycursor, player, opponent)
+    except Exception as e:
+        # raise e
+        print("-------------------------------")
+        # print(traceback.format_exc())
+        print(e, file_path)
+        print("-------------------------------")
