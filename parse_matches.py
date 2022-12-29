@@ -86,44 +86,41 @@ for f in files:
 
         replay = sc2.load_replay(path + f, load_map = False)
         # print(f)
-        if replay.type == '1v1' and replay.frames > (sec * 22.404):
+        if replay.type != '1v1' or replay.frames < (sec * 22.404):
+            continue
 
-            opponent = replay.players[0]
+        opponent = replay.players[0]
+        opponent_uid = opponent.detail_data['bnet']['uid']
+
+        player = replay.players[1]
+        player_uid = player.detail_data['bnet']['uid']
+
+        if opponent_uid == 818362 or opponent_uid == 1931022:
+            opponent = replay.players[1]
             opponent_uid = opponent.detail_data['bnet']['uid']
 
-            player = replay.players[1]
+            player = replay.players[0]
             player_uid = player.detail_data['bnet']['uid']
 
-            if opponent_uid == 818362 or opponent_uid == 1931022:
-                opponent = replay.players[1]
-                opponent_uid = opponent.detail_data['bnet']['uid']
+        if not opponent.is_human :
+            continue
 
-                player = replay.players[0]
-                player_uid = player.detail_data['bnet']['uid']
+        print(player.name,player.play_race, opponent.name,opponent.play_race, player.result)
+        sql = f"SELECT * FROM match_results WHERE player_1 = {player_uid} AND player_2 = {opponent_uid}"
+        mycursor.execute(sql)
+        myresult = mycursor.fetchall()
 
-
-            if not opponent.is_human :
-                continue
-
-            sql = f"SELECT * FROM match_results WHERE player_1 = {player_uid} AND player_2 = {opponent_uid}"
-            mycursor.execute(sql, id)
-
-            myresult = mycursor.fetchall()
-            print(len(myresult))
-
-            if len(myresult) == 0:
-                column = (match_result(player, opponent))
-                sql_insert = f"INSERT INTO match_results (player_1, player_2, {column}) VALUES ({player_uid},{opponent_uid}, 1)"
-                mycursor.execute(sql_insert)
-                mydb.commit()
-                print("insert")
-            else:
-                column = match_result(player, opponent)
-                sql_update = f"UPDATE match_results set {column} = {column} + 1 WHERE player_1 = {player_uid} AND player_2 = {opponent_uid}"
-                mycursor.execute(sql_update)
-                mydb.commit()
-                print("update")
-
+        if len(myresult) == 0:
+            column = (match_result(player, opponent))
+            sql_insert = f"INSERT INTO match_results (player_1, player_2, {column}) VALUES ({player_uid},{opponent_uid}, 1)"
+            mycursor.execute(sql_insert)
+            mydb.commit()
+        else:
+            id = myresult[0][0]
+            column = match_result(player, opponent)
+            sql_update = f"UPDATE match_results set {column} = {column} + 1 WHERE id = {id}"
+            mycursor.execute(sql_update)
+            mydb.commit()
 
     except Exception as e:
         # raise e
