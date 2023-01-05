@@ -6,7 +6,13 @@ from decouple import config
 from sc2reader.objects import Player
 
 
-def insert_player(db_connection, db_cursor, player):
+def insert_player(db_connection, db_cursor, player, replay):
+    sql = f"SELECT * FROM replay_table WHERE file_hash = '{replay.filehash}'"
+    db_cursor.execute(sql)
+    myresult = db_cursor.fetchall()
+    if myresult[0][1] == 1:
+        return # it has been already updated
+
     uid = player.detail_data['bnet']['uid']
     tag2 = "-"
     if player.clan_tag != "":
@@ -71,7 +77,13 @@ def match_result(player, opponent)->str:
             elif result == 'Loss':
                 return 'p_p_lose'
 
-def update_match_record(db_connection, db_cursor, player, opponent):
+def update_match_record(db_connection, db_cursor, player, opponent, replay):
+    sql = f"SELECT * FROM replay_table WHERE file_hash = '{replay.filehash}'"
+    db_cursor.execute(sql)
+    myresult = db_cursor.fetchall()
+    if myresult[0][2] == 1:
+        return # it has been already updated
+
     print(player.name,player.play_race, opponent.name,opponent.play_race, player.result)
     opponent_uid = opponent.detail_data['bnet']['uid']
     player_uid = player.detail_data['bnet']['uid']
@@ -91,7 +103,7 @@ def update_match_record(db_connection, db_cursor, player, opponent):
         db_cursor.execute(sql_update)
         db_connection.commit()
 
-def register_replay(db_connection, db_cursor, player, opponent, replay):
+def register_replay(db_connection, db_cursor, player, opponent, replay, player_updated:int, match_updated:int):
     opponent_uid = opponent.detail_data['bnet']['uid']
     player_uid = player.detail_data['bnet']['uid']
     sql = f"SELECT * FROM replay_table WHERE file_hash = '{replay.filehash}'"
@@ -101,13 +113,15 @@ def register_replay(db_connection, db_cursor, player, opponent, replay):
     if len(myresult) == 0:
         sql_insert = f"INSERT INTO replay_table\
             (file_hash, player_updated, match_updated, path, player_1, player_2, race_1, race_2, result, map_name, frames)\
-            VALUES ('{replay.filehash}', 1, 1, '{replay.filename}', {player_uid}, {opponent_uid}, '{player.play_race}', '{opponent.play_race}',\
+            VALUES ('{replay.filehash}', {player_updated}, {match_updated}, '{replay.filename}', {player_uid}, {opponent_uid}, '{player.play_race}', '{opponent.play_race}',\
             '{player.result}', '{replay.map_name}', {replay.frames})"
         # print(sql_insert)
         db_cursor.execute(sql_insert)
         db_connection.commit()
 
 def update_db(mydb, mycursor, file_path):
+    player_updated = 0
+    match_updated = 0
     try:
         sec = 1
         if ".writeCacheBackup" in file_path:
@@ -129,20 +143,34 @@ def update_db(mydb, mycursor, file_path):
         if not opponent.is_human :
             return
 
-        insert_player(mydb, mycursor, opponent)
+        insert_player(mydb, mycursor, opponent, replay)
+        player_updated = 1
+        print("player created", file_path)
     except Exception as e:
         # raise e
-        print("-------------------------------")
-        # print(traceback.format_exc())
+        print("----------PLAYER TABLE ERROR------------------")
+        print(traceback.format_exc())
         print(e, file_path)
         print("-------------------------------")
 
     try:
-        update_match_record(mydb, mycursor, player, opponent)
+        update_match_record(mydb, mycursor, player, opponent, replay)
+        match_updated = 1
+        print("match updated", file_path)
     except Exception as e:
         # raise e
+        print("----------MATCH TABLE ERROR-------------------")
+        print(traceback.format_exc())
+        print(e, file_path)
         print("-------------------------------")
-        # print(traceback.format_exc())
+
+    try:
+        register_replay(mydb, mycursor, player, opponent, replay, player_updated, match_updated)
+        print("replay created", file_path)
+    except Exception as e:
+        # raise e
+        print("-----------REPLAY TABLE ERROR-------------")
+        print(traceback.format_exc())
         print(e, file_path)
         print("-------------------------------")
 
