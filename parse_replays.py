@@ -5,7 +5,7 @@ import traceback
 from decouple import config
 from sc2reader.objects import Player
 
-from parse_matches import update_db
+from parse_matches import update_db, update_replay
 
 
 password = config('MYSQL_PASSWORD')
