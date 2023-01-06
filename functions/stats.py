@@ -216,28 +216,32 @@ def killed_events(events):
     return filtered, filtered_2
     ...
 
-def return_ranges(events):
+def return_ranges(events, minutes=10000):
     count = 0
     time = []
     event = []
     for b in events:
-        time.append(b.second/60)
+        if b.second/1.4/60 > minutes:
+            continue
+        time.append(b.second/1.4/60)
         event.append(count)
         count = count + 1
     return time, event
 
-def return_total_worker_ranges(born, dead):
+def return_total_worker_ranges(born, dead, minutes=10000):
     ut = born + dead
     newlist = sorted(ut, key=lambda x: x.second)
     total_count = []
     time_total = []
     count = 0
     for e in newlist:
+        if e.second/1.4/60 > minutes:
+            continue
         if e.name == 'UnitBornEvent':
             count = count + 1
         if e.name == 'UnitDiedEvent':
             count = count - 1
-        time_total.append(e.second/60)
+        time_total.append(e.second/1.4/60)
         total_count.append(count)
     return time_total, total_count
 
@@ -250,17 +254,17 @@ def worker_timeline(replay):
 
     print(len(drone_born_events))
 
-    time_born, worker_count = return_ranges(drone_born_events)
-    time_dead, dead_count = return_ranges(drone_build_events)
-    time_killed, killed_count = return_ranges(drone_killed_events)
-    time_total, total_count = return_total_worker_ranges(drone_born_events,drone_dead_events)
+    time_born, worker_count = return_ranges(drone_born_events, 9)
+    time_dead, dead_count = return_ranges(drone_build_events, 9)
+    time_killed, killed_count = return_ranges(drone_killed_events, 9)
+    time_total, total_count = return_total_worker_ranges(drone_born_events,drone_dead_events, 9)
 
 
     plt.figure(dpi=200)
     plt.plot(time_born, worker_count, 'bo', markersize=0.5)
     plt.plot(time_killed, killed_count, 'ro', markersize=0.5)
     plt.plot(time_dead, dead_count, 'yo', markersize=0.5)
-    plt.plot(time_total, total_count)
+    plt.plot(time_total, total_count, drawstyle='steps-pre',markersize=0.5)
     # plt.plot(workers_2, label=replay.players[1])
     plt.legend(loc=2)
     plt.figlegend
