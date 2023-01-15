@@ -246,7 +246,7 @@ def return_total_worker_ranges(born, dead, minutes=10000):
     return time_total, total_count
 
 
-def worker_timeline(replay):
+def worker_timeline(replay, minute_limit = 9):
     events = events_dic(replay)
     drone_born_events = drone_events(events["UnitBornEvent"])
     drone_dead_events = drone_events(events["UnitDiedEvent"])
@@ -254,10 +254,10 @@ def worker_timeline(replay):
 
     print(len(drone_born_events))
 
-    time_born, worker_count = return_ranges(drone_born_events, 9)
-    time_dead, dead_count = return_ranges(drone_build_events, 9)
-    time_killed, killed_count = return_ranges(drone_killed_events, 9)
-    time_total, total_count = return_total_worker_ranges(drone_born_events,drone_dead_events, 9)
+    time_born, worker_count = return_ranges(drone_born_events, minute_limit)
+    time_dead, dead_count = return_ranges(drone_build_events, minute_limit)
+    time_killed, killed_count = return_ranges(drone_killed_events, minute_limit)
+    time_total, total_count = return_total_worker_ranges(drone_born_events,drone_dead_events, minute_limit)
 
 
     plt.figure(dpi=200)
@@ -274,7 +274,7 @@ def worker_timeline(replay):
     plt.yticks(range(0, 140, 5))
     plt.grid()
     plt.title(replay.filename)
-    plt.savefig(f"plot/{os.path.splitext(os.path.basename(replay.filename))[0]}_WIN.png")
+    plt.savefig(f"plot/{os.path.splitext(os.path.basename(replay.filename))[0]}.png")
     # plt.show()
 
 # unit_born_events = events_of_type["UnitBornEvent"]
