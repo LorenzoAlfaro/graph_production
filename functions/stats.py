@@ -264,13 +264,17 @@ def worker_timeline(replay):
     plt.plot(time_born, worker_count, 'bo', markersize=0.5)
     plt.plot(time_killed, killed_count, 'ro', markersize=0.5)
     plt.plot(time_dead, dead_count, 'yo', markersize=0.5)
-    plt.plot(time_total, total_count, drawstyle='steps-pre',markersize=0.5)
+    # plt.plot(time_total, total_count, drawstyle='steps-pre',markersize=0.5)
     # plt.plot(workers_2, label=replay.players[1])
     plt.legend(loc=2)
     plt.figlegend
     plt.xlabel('seconds')
+    plt.margins(x=-0.4, y=-0.4)
+    plt.xticks(range(0, 11, 1))
+    plt.yticks(range(0, 140, 5))
+    plt.grid()
     plt.title(replay.filename)
-    plt.savefig(f"plot/{os.path.splitext(os.path.basename(replay.filename))[0]}.png")
+    plt.savefig(f"plot/{os.path.splitext(os.path.basename(replay.filename))[0]}_WIN.png")
     # plt.show()
 
 # unit_born_events = events_of_type["UnitBornEvent"]
