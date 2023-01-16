@@ -1,10 +1,7 @@
 import os
 import shutil
-from numpy import average
-import sc2reader
 import matplotlib.pyplot as plt
 from functions.prettyPrinter import formatReplay
-import matplotlib.pyplot as plt
 
 def getMyTeamnumber(replay, name):
     for key in replay.player:
@@ -72,12 +69,12 @@ def events_dic(replay):
     return events_of_type
 
 def drone_events(events):
-    drone_born = []
+    filter_events = []
     for event in events:
         if event.unit.name != "Drone":
             continue
-        drone_born.append(event)
-    return drone_born
+        filter_events.append(event)
+    return filter_events
 
 def killed_events(events):
     filtered = []
@@ -87,8 +84,8 @@ def killed_events(events):
             filtered_2.append(event)
             continue
         filtered.append(event)
+    # 2 casues of drone death, being killed, or being transform into building
     return filtered, filtered_2
-    ...
 
 def return_ranges(events, minutes=10000):
     count = 0
@@ -103,6 +100,7 @@ def return_ranges(events, minutes=10000):
     return time, event
 
 def return_total_worker_ranges(born, dead, minutes=10000):
+    # merge two lists and sort by time, to manually count the actual worker count
     ut = born + dead
     newlist = sorted(ut, key=lambda x: x.second)
     total_count = []
@@ -142,12 +140,14 @@ def worker_timeline(replay, minute_limit = 9):
     # plt.plot(workers_2, label=replay.players[1])
     plt.legend(loc=2)
     plt.figlegend
-    plt.xlabel('seconds')
+    plt.xlabel('minute')
     plt.margins(x=-0.4, y=-0.4)
     plt.xticks(range(0, 11, 1))
     plt.yticks(range(0, 140, 5))
     plt.grid()
-    plt.title(replay.filename)
+    title = f"{replay.filename.split('/')[-1].split('.')[0]} {replay.players[0].name} vs {replay.players[1].name}"
+    plt.title(title)
+
     # plt.savefig(f"plot/{os.path.splitext(os.path.basename(replay.filename))[0]}.png")
     plt.show()
 
