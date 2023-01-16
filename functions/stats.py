@@ -133,9 +133,9 @@ def worker_timeline(replay, minute_limit = 9):
 
 
     plt.figure(dpi=200)
-    plt.plot(time_born, worker_count, 'bo', markersize=0.5)
-    plt.plot(time_killed, killed_count, 'ro', markersize=0.5)
-    plt.plot(time_dead, dead_count, 'yo', markersize=0.5)
+    plt.plot(time_born, worker_count, 'bo', markersize=0.5, label='drones born')
+    plt.plot(time_killed, killed_count, 'ro', markersize=0.5, label='drones killed')
+    plt.plot(time_dead, dead_count, 'yo', markersize=0.5, label='drones transformed')
     plt.plot(time_total, total_count, drawstyle='steps-pre',markersize=0.5)
     # plt.plot(workers_2, label=replay.players[1])
     plt.legend(loc=2)

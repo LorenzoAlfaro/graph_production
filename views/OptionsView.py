@@ -8,9 +8,15 @@ class OptionsView(qtw.QWidget):
 
         self.drone_born_chkbox = qtw.QCheckBox()
         self.drone_born_chkbox.setCheckable(True)
-        self.open_replay_bttn = qtw.QPushButton("Select Replay")
-        self.layout.addRow(qtw.QLabel("Open Replay"), self.open_replay_bttn)
+        self.load_replay_bttn = qtw.QPushButton("Select Replay")
+        self.plot_bttn = qtw.QPushButton("Plot Replay")
+        self.player1_lbl = qtw.QLabel("Player 1 ?")
+        self.player2_lbl = qtw.QLabel("Player 2 ?")
+        self.layout.addRow(qtw.QLabel("Load Replay"), self.load_replay_bttn)
+        self.layout.addRow(qtw.QLabel("Plot Replay"), self.plot_bttn)
         self.layout.addRow(qtw.QLabel("Plot Drone Born"), self.drone_born_chkbox)
+        self.layout.addRow(qtw.QLabel("Player 1"), self.player1_lbl)
+        self.layout.addRow(qtw.QLabel("Player 2"), self.player2_lbl)
 
         self.setLayout(self.layout)
 
