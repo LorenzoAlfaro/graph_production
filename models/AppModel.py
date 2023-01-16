@@ -9,3 +9,10 @@ class AppModel(qtc.QObject):
 
     def __init__(self):
         super().__init__()
+
+    replay_path = ""
+    replay_path_signal = qtc.pyqtSignal(str)
+
+    def set_replay_path(self, path):
+        self.replay_path = path
+        self.replay_path_signal.emit(path)
