@@ -8,6 +8,8 @@ class OptionsView(qtw.QWidget):
 
         self.drone_born_chkbox = qtw.QCheckBox()
         self.drone_born_chkbox.setCheckable(True)
+        self.open_replay_bttn = qtw.QPushButton("Select Replay")
+        self.layout.addRow(qtw.QLabel("Open Replay"), self.open_replay_bttn)
         self.layout.addRow(qtw.QLabel("Plot Drone Born"), self.drone_born_chkbox)
 
         self.setLayout(self.layout)
