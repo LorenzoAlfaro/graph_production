@@ -24,3 +24,6 @@ class Controller(qtc.QObject):
         fname = qtw.QFileDialog.getOpenFileName(app, 'Open file', self.folder, 'Replays(*.SC2Replay)')
         self.model.set_replay_path(fname[0])
         self.replay = sc2.load_replay(fname[0], load_map = False)
+
+        self.model.player_dict.clear()
+        self.model.set_players_dict(self.replay.players)

@@ -13,6 +13,14 @@ class AppModel(qtc.QObject):
     replay_path = ""
     replay_path_signal = qtc.pyqtSignal(str)
 
+    player_dict = {}
+    player_dict_signal = qtc.pyqtSignal(object)
+
     def set_replay_path(self, path):
         self.replay_path = path
         self.replay_path_signal.emit(path)
+
+    def set_players_dict(self, players):
+        for player in players:
+            self.player_dict[player.name] = player.uid
+        self.player_dict_signal.emit(self.player_dict)

@@ -6,3 +6,4 @@ def connectModel(AppView: AppView,Model: AppModel,Controller: Controller, Update
 
     AppView.OptionsView.load_replay_bttn.clicked.connect(lambda: Controller.load_replay(AppView))
     AppView.OptionsView.plot_bttn.clicked.connect(lambda: Controller.plot_graph())
+    Model.player_dict_signal.connect(AppView.OptionsView.populate_player)
