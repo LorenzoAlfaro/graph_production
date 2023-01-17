@@ -35,8 +35,8 @@ class MainWindow(qtw.QMainWindow):
         self._createToolBar()
         self._createStatusBar()
 
-        password = config('MYSQL_PASSWORD')
-        user = config('USER_NAME')
+        password = config('MYSQL_PASSWORD',default='')
+        user = config('USER_NAME', default='')
 
         # self.fileWatcher.addPath("C:\\Users\\e420882\\Desktop\\TEST")
         # self.fileWatcher.directoryChanged.connect(lambda p:print('file has changed'+p) )
