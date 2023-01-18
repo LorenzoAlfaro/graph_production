@@ -14,15 +14,13 @@ from controllers.Controller import Controller
 
 class MainWindow(qtw.QMainWindow):
 
-    fileWatcher = qtc.QFileSystemWatcher()
-
     def __init__(self):
         super().__init__()
 
         self.version = ' 1.0'
         # self.setWindowIcon(qtg.QIcon('flask.png'))
         self.setGeometry(500, 100, 600, 640)
-        self.setWindowTitle("SC2 Trainer" + self.version)
+        self.setWindowTitle("StarCraft II Trainer" + self.version)
 
         self.Model                  = AppModel()
         self.Controller             = Controller(self.Model)
@@ -35,13 +33,8 @@ class MainWindow(qtw.QMainWindow):
         self._createToolBar()
         self._createStatusBar()
 
-        password = config('MYSQL_PASSWORD')
-        user = config('USER_NAME')
-
-        # self.fileWatcher.addPath("C:\\Users\\e420882\\Desktop\\TEST")
-        # self.fileWatcher.directoryChanged.connect(lambda p:print('file has changed'+p) )
-        # self.findNewFile()
-        # keep track of the most recent file
+        password = config('MYSQL_PASSWORD',default='')
+        user = config('USER_NAME', default='')
 
     def _createMenu(self):
         self.menu = self.menuBar().addMenu("&Menu")
@@ -63,9 +56,6 @@ class MainWindow(qtw.QMainWindow):
             self.spinner.start()
         else:
             self.spinner.stop()
-
-    def findNewFile(self):
-        print("Created: %s" % time.ctime(os.path.getctime("C:\\Users\\e420882\\Desktop\\TEST\\A.txt")))
 
 if __name__ == "__main__":
     app = qtw.QApplication(sys.argv)
