@@ -12,6 +12,7 @@ class OptionsView(qtw.QWidget):
         self.plot_bttn = qtw.QPushButton("Plot Replay")
         self.player1_lbl = qtw.QLabel("Player 1 ?")
         self.player2_lbl = qtw.QLabel("Player 2 ?")
+        self.unit_name_textbox = qtw.QLineEdit()
         self.players_combo_box = qtw.QComboBox(self)
         self.layout.addRow(qtw.QLabel("Load Replay"), self.load_replay_bttn)
         self.layout.addRow(qtw.QLabel("Plot Replay"), self.plot_bttn)
@@ -19,6 +20,7 @@ class OptionsView(qtw.QWidget):
         self.layout.addRow(qtw.QLabel("Player 1"), self.player1_lbl)
         self.layout.addRow(qtw.QLabel("Player 2"), self.player2_lbl)
         self.layout.addRow(qtw.QLabel("Players"), self.players_combo_box)
+        self.layout.addRow(qtw.QLabel("Unit"),self.unit_name_textbox)
 
         self.setLayout(self.layout)
 

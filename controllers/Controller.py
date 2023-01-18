@@ -18,7 +18,7 @@ class Controller(qtc.QObject):
     def plot_graph(self):
         event_names = set([event.name for event in self.replay.events])
         print(event_names)
-        worker_timeline(self.replay)
+        worker_timeline(self.replay, unit_name = self.model.unit_name)
 
     def load_replay(self, app):
         fname = qtw.QFileDialog.getOpenFileName(app, 'Open file', self.folder, 'Replays(*.SC2Replay)')
