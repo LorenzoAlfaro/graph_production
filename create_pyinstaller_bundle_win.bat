@@ -1,1 +1,1 @@
-pyinstaller.exe app.spec --clean -y --distpath temp/dist --workpath temp/build
+pyinstaller.exe app.spec --clean -y --distpath temp/dist/my_app --workpath temp/build
