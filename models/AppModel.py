@@ -1,4 +1,16 @@
+import os
 from PyQt5 import QtCore as qtc
+from decouple import AutoConfig
+import sys
+from pathlib import Path
+
+if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+    bundle_dir = Path(sys._MEIPASS)
+else:
+    bundle_dir = Path(__file__).parent
+
+path_to_dat = Path.cwd() / bundle_dir
+config = AutoConfig(search_path=path_to_dat)
 
 class AppModel(qtc.QObject):
 
@@ -18,6 +30,8 @@ class AppModel(qtc.QObject):
 
     unit_name = "Drone"
     unit_name_signal = qtc.pyqtSignal(str)
+
+    replay_folder = config('REPLAY_FOLDER', default=f"{os.path.expanduser('~')}/Documents/StarCraft II")
 
     def set_replay_path(self, path):
         self.replay_path = path

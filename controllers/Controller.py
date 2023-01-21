@@ -1,8 +1,5 @@
-
-import os
 from PyQt5 import QtCore as qtc
 from PyQt5 import QtWidgets as qtw
-from decouple import config
 import sc2reader as sc2
 from models.AppModel import AppModel
 from functions.stats import worker_timeline
@@ -12,7 +9,7 @@ class Controller(qtc.QObject):
     def __init__(self, model: AppModel):
         super().__init__()
         self.model = model
-        self.folder = config('REPLAY_FOLDER', default=f"{os.path.expanduser('~')}/Documents/StarCraft II")
+        self.folder = self.model.replay_folder
         self.replay = None
 
     def plot_graph(self):
