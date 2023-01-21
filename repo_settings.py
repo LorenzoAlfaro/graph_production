@@ -9,11 +9,11 @@ logger = logging.getLogger(__name__)
 
 """
 
-DISCLAIMER 
+DISCLAIMER
 
-For convenience, this example uses a single key pair for all TUF roles, 
-and the private key is unencrypted and stored locally. This approach is *not* 
-safe and should *not* be used in production. 
+For convenience, this example uses a single key pair for all TUF roles,
+and the private key is unencrypted and stored locally. This approach is *not*
+safe and should *not* be used in production.
 
 """
 
@@ -35,4 +35,4 @@ PRIVATE_KEY_PATH = KEYS_DIR / KEY_NAME
 KEY_MAP = {role_name: [KEY_NAME] for role_name in DEFAULT_KEY_MAP.keys()}
 ENCRYPTED_KEYS = []
 THRESHOLDS = dict(root=1, targets=1, snapshot=1, timestamp=1)
-EXPIRATION_DAYS = dict(root=365, targets=7, snapshot=7, timestamp=1)
+EXPIRATION_DAYS = dict(root=365, targets=365, snapshot=365, timestamp=365)
