@@ -4,7 +4,8 @@ from PyQt5 import QtCore as qtc
 from PyQt5 import QtGui as qtg
 import os.path, time
 import mysql.connector
-from decouple import config
+from decouple import AutoConfig
+from pathlib import Path
 from Connector import connectModel
 from waitingspinnerwidget       import QtWaitingSpinner
 from models.AppModel            import AppModel
@@ -20,6 +21,31 @@ logger = logging.getLogger(__name__)
 import settings
 
 __version__  = settings.APP_VERSION
+
+is_frozen = False
+if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+    bundle_dir = Path(sys._MEIPASS)
+    path_exe = sys.executable
+    is_frozen = True
+else:
+    bundle_dir = Path(__file__).parent
+    path_exe = f'{sys.executable}\" \"{sys.argv[0]}'
+path_to_dat = Path.cwd() / bundle_dir
+
+config = AutoConfig(search_path=path_to_dat)
+
+custom_template =  """@echo off
+{log_lines}
+echo Moving app files...
+robocopy "{src_dir}" "{dst_dir}" {robocopy_options}
+echo Done.
+echo Restarting app
+start "" "{app_exe_path}"
+{delete_self}
+"""
+custom_template_variables = dict(
+    app_exe_path=path_exe,
+)
 
 def progress_hook(bytes_downloaded: int, bytes_expected: int):
     progress_percent = bytes_downloaded / bytes_expected * 100
@@ -50,6 +76,8 @@ def update(pre: str):
             # paths specified in exclude_from_purge. So, only use
             # purge_dst_dir=True if you are certain that your app_install_dir
             # does not contain any unrelated content.
+            batch_template=custom_template,
+            batch_template_extra_kwargs=custom_template_variables,
             progress_hook=progress_hook,
             purge_dst_dir=False,
             exclude_from_purge=None,
