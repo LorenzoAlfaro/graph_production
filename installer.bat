@@ -1,4 +1,10 @@
-IF NOT EXIST %userprofile%\AppData\Local\Programs\my_app md %userprofile%\AppData\Local\Programs\my_app
-powershell -command "Start-BitsTransfer -Source https://deploymentapps.z22.web.core.windows.net/ggtrainer/targets/my_app-1.0.tar.gz -Destination %userprofile%\AppData\Local\Programs\my_app\my_app-1.0.tar.gz"
-tar -xf %userprofile%\AppData\Local\Programs\my_app\my_app-1.0.tar.gz -C %userprofile%\AppData\Local\Programs\my_app\
-powershell "$s=(New-Object -COM WScript.Shell).CreateShortcut('%userprofile%\Desktop\my_app.lnk');$s.TargetPath='%userprofile%\AppData\Local\Programs\my_app\app.exe';$s.Arguments='connect';$s.WorkingDirectory='%userprofile%\AppData\Local\Programs\my_app';$s.Save()"
+:: my_app must be replaced with value from settings.APP_NAME
+:: app_exe must be replaced with value from app.spec name='app'
+set app_name=my_app
+set app_dir=%userprofile%\AppData\Local\Programs\%app_name%
+set app_exe=app
+
+IF NOT EXIST %app_dir% md %app_dir%
+powershell -command "Start-BitsTransfer -Source https://deploymentapps.z22.web.core.windows.net/ggtrainer/targets/%app_name%-1.0.tar.gz -Destination %userprofile%\AppData\Local\Programs\%app_name%\%app_name%-1.0.tar.gz"
+tar -xf  %app_dir%\%app_name%-1.0.tar.gz -C %app_dir%
+powershell "$s=(New-Object -COM WScript.Shell).CreateShortcut('%userprofile%\Desktop\%app_name%.lnk');$s.TargetPath='%app_dir%\%app_exe%.exe';$s.Arguments='connect';$s.WorkingDirectory='%app_dir%';$s.Save()"

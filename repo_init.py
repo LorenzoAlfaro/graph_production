@@ -2,7 +2,7 @@ import logging
 
 from tufup.repo import Repository
 
-# from myapp.settings import APP_NAME
+from settings import APP_NAME
 from repo_settings import (
     ENCRYPTED_KEYS, EXPIRATION_DAYS, KEY_MAP, KEYS_DIR, REPO_DIR, THRESHOLDS
 )
@@ -24,7 +24,7 @@ if __name__ == '__main__':
 
     # Create repository instance
     repo = Repository(
-        app_name='my_app',
+        app_name=APP_NAME,
         app_version_attr='app.__version__',
         repo_dir=REPO_DIR,
         keys_dir=KEYS_DIR,
