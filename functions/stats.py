@@ -80,7 +80,7 @@ def drone_events(events):
         filter_events.append(event)
     return filter_events
 
-def killed_events(events):
+def filter_killed_events(events):
     filtered = []
     filtered_2 = []
     for event in events:
@@ -121,18 +121,18 @@ def return_total_worker_ranges(born, dead, minutes=10000):
         total_count.append(count)
     return time_total, total_count
 
-def worker_timeline(replay, unit_name = "Drone", minute_limit = 9):
+def worker_timeline(replay, unit_name = "Drone", minute_limit = 9, uid = 0):
     events = events_dic(replay)
-    drone_born_events = [event for event in events["UnitBornEvent"] if event.unit.name  == unit_name]
-    drone_dead_events = [event for event in events["UnitDiedEvent"] if event.unit.name  == unit_name]
-    drone_killed_events, drone_build_events = killed_events(drone_dead_events)
-    print(len(drone_born_events))
+    born_events = [event for event in events["UnitBornEvent"] if event.unit.name  == unit_name and event.unit_controller.uid == uid]
+    dead_events = [event for event in events["UnitDiedEvent"] if event.unit.name  == unit_name and event.unit.owner.uid == uid]
+    killed_events, build_events = filter_killed_events(dead_events)
+    print(len(born_events))
     print(replay.players[0], replay.players[1])
     plt.figure(dpi=200)
-    plt.plot(*return_ranges(drone_born_events, minute_limit), 'bo', markersize=0.5, label=f'{unit_name} born')
-    plt.plot(*return_ranges(drone_killed_events, minute_limit), 'ro', markersize=0.5, label=f'{unit_name} killed')
-    plt.plot(*return_ranges(drone_build_events, minute_limit), 'yo', markersize=0.5, label=f'{unit_name} transformed')
-    plt.plot(*return_total_worker_ranges(drone_born_events,drone_dead_events, minute_limit), drawstyle='steps-pre',markersize=0.5)
+    plt.plot(*return_ranges(born_events, minute_limit), 'bo', markersize=0.5, label=f'{unit_name} born')
+    plt.plot(*return_ranges(killed_events, minute_limit), 'ro', markersize=0.5, label=f'{unit_name} killed')
+    plt.plot(*return_ranges(build_events, minute_limit), 'yo', markersize=0.5, label=f'{unit_name} transformed')
+    plt.plot(*return_total_worker_ranges(born_events,dead_events, minute_limit), drawstyle='steps-pre',markersize=0.5)
     # plt.plot(workers_2, label=replay.players[1])
     plt.legend(loc=2)
     plt.figtext(0.5, 0.01, f"{replay.players[0]}{replay.players[1]}", wrap=True, horizontalalignment='center', fontsize=12)
