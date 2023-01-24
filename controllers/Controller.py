@@ -24,3 +24,6 @@ class Controller(qtc.QObject):
 
         self.model.player_dict.clear()
         self.model.set_players_dict(self.replay.players)
+
+    def player_selected_changed(self, name):
+        print(self.model.player_dict[name])
