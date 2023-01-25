@@ -8,7 +8,7 @@ from tufup.utils.platform_specific import ON_MAC, ON_WINDOWS
 logger = logging.getLogger(__name__)
 
 # App info
-APP_NAME = 'my_app'
+APP_NAME = 'ggtrainer' # my_app is generic
 APP_VERSION = '1.0'
 
 # On Windows 10, a typical location for app data would be %PROGRAMDATA%\MyApp
@@ -46,13 +46,13 @@ elif ON_MAC:
 else:
     raise NotImplementedError('Unsupported platform')
 
-PROGRAMS_DIR = PER_USER_PROGRAMS_DIR if FROZEN else DEV_DIR # C:/Users/e420882/AppData/Local / Programs
-DATA_DIR = PER_USER_DATA_DIR if FROZEN else DEV_DIR # C:/Users/e420882/AppData/Local
+PROGRAMS_DIR = PER_USER_PROGRAMS_DIR if FROZEN else DEV_DIR # C:/Users/username/AppData/Local / Programs
+DATA_DIR = PER_USER_DATA_DIR if FROZEN else DEV_DIR # C:/Users/username/AppData/Local
 
-INSTALL_DIR = PROGRAMS_DIR / APP_NAME # C:/Users/e420882/AppData/Local / Programs / my_app
-UPDATE_CACHE_DIR = DATA_DIR / APP_NAME / 'update_cache' # # C:/Users/e420882/AppData/Local / my_app / update_cache
-METADATA_DIR = UPDATE_CACHE_DIR / 'metadata' # C:/Users/e420882/AppData/Local / my_app / update_cache / metadata
-TARGET_DIR = UPDATE_CACHE_DIR / 'targets' # C:/Users/e420882/AppData/Local / my_app / update_cache / targets
+INSTALL_DIR = PROGRAMS_DIR / APP_NAME # C:/Users/username/AppData/Local / Programs / my_app
+UPDATE_CACHE_DIR = DATA_DIR / APP_NAME / 'update_cache' # # C:/Users/username/AppData/Local / my_app / update_cache
+METADATA_DIR = UPDATE_CACHE_DIR / 'metadata' # C:/Users/username/AppData/Local / my_app / update_cache / metadata
+TARGET_DIR = UPDATE_CACHE_DIR / 'targets' # C:/Users/username/AppData/Local / my_app / update_cache / targets
 
 # Update-server urls
 # METADATA_BASE_URL = 'http://localhost:8000/metadata/'

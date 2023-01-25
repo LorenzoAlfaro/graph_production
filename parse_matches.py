@@ -10,8 +10,8 @@ def insert_player(db_connection, db_cursor, player, replay):
     sql = f"SELECT * FROM replay_table WHERE file_hash = '{replay.filehash}'"
     db_cursor.execute(sql)
     myresult = db_cursor.fetchall()
-    if myresult[0][1] == 1:
-        return # it has been already updated
+    # if myresult[0][1] == 1:
+    #     return # it has been already updated
 
     uid = player.detail_data['bnet']['uid']
     tag2 = "-"
@@ -81,8 +81,8 @@ def update_match_record(db_connection, db_cursor, player, opponent, replay):
     sql = f"SELECT * FROM replay_table WHERE file_hash = '{replay.filehash}'"
     db_cursor.execute(sql)
     myresult = db_cursor.fetchall()
-    if myresult[0][2] == 1:
-        return # it has been already updated
+    # if myresult[0][2] == 1:
+    #     return # it has been already updated
 
     print(player.name,player.play_race, opponent.name,opponent.play_race, player.result)
     opponent_uid = opponent.detail_data['bnet']['uid']
