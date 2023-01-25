@@ -33,6 +33,9 @@ class AppModel(qtc.QObject):
 
     replay_folder = config('REPLAY_FOLDER', default=f"{os.path.expanduser('~')}/Documents/StarCraft II")
 
+    player_1_selected = ""
+    player_1_selected_signal = qtc.pyqtSignal(str)
+
     def set_replay_path(self, path):
         self.replay_path = path
         self.replay_path_signal.emit(path)
@@ -47,3 +50,7 @@ class AppModel(qtc.QObject):
     def set_unit_name(self, name:str):
         self.unit_name = name
         self.unit_name_signal.emit(name)
+
+    def set_player_1_selected(self, name):
+        self.player_1_selected = name
+        self.player_1_selected_signal.emit(name)
