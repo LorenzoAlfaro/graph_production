@@ -26,4 +26,6 @@ class Controller(qtc.QObject):
         self.model.set_players_dict(self.replay.players)
 
     def player_selected_changed(self, name):
+        if name == '':
+            return
         print(self.model.player_dict[name])
