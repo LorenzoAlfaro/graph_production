@@ -1,24 +1,25 @@
 import sys
+import os.path
+import time
+import logging
+import shutil
+from pathlib import Path
+
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
 from PyQt5 import QtGui as qtg
-import os.path, time
 import mysql.connector
 from decouple import AutoConfig
-from pathlib import Path
+
 from Connector import connectModel
-from waitingspinnerwidget       import QtWaitingSpinner
-from models.AppModel            import AppModel
+from waitingspinnerwidget import QtWaitingSpinner
+from models.AppModel import AppModel
 from views.AppView import AppView
 from controllers.Controller import Controller
-
-import logging
-import shutil
-import time
-
 from tufup.client import Client
-logger = logging.getLogger(__name__)
 import settings
+
+logger = logging.getLogger(__name__)
 
 __version__  = settings.APP_VERSION
 
