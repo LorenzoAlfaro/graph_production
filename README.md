@@ -47,8 +47,3 @@ hatchery **stops** producing more. (1 larva every 10 seconds up to 3 larva)
 So, in this graph you can follow how good you are using the larva as it is being produced. High larvae levels in the early game means you are not spending it! Big no no. 
 After that you can find out why?
 In my case I get distracted by the reaper. Or killing the opponents overlord. Either way, you are not doing what you are supposed to.
-
-
-
-
-
